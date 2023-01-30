@@ -1,109 +1,153 @@
-/** INCIO JAVASCRIPT **/
-
-let nombre = prompt ("Bienvenido: Ingrese su nombre")
-let apellido = prompt ("Ingrese su apellido")
-let edad = prompt ("Ingrese su edad")
-
-if (edad <18) {
-    alert ("No puedes realizar compras siendo menor de edad")
-} else {
-    alert ("bienvenido: "+ nombre +" "+ apellido)
-}
-
-let comercio = prompt ("Posees comercio para compras mayoristas?")
-
-if (comercio === "si") {
-    alert ("Puede realizar compras Mayoristas. Adelante")
-} else {
-    alert ("No realizamos comprar minoristas")
-}
-
-/** ARRAY DE PRODUCTOS */
-
+// PRODUCTOS
 const productos = [
-    {   
-        id: "Detergente01",
+    // Abrigos
+    {
+        id: "Detergente",
         titulo: "Detergente Magistral",
-        Descripcion: "Magistral Concentrado",
         imagen: "./img/deter-magistral.jpg",
-        precio: 100,
-        cantidad: 50
+        categoria: {
+            nombre: "DETERGENTES",
+            id: "detergentes"
+        },
+        precio: 350 
     },
     {
-        id: "Detergente02",
+        id: "detergente Ala Plus",
         titulo: "Detergente ALA PLUS",
-        Descripcion: "ALA Concentrado",
         imagen: "./img/det-alaplus.jpg",
-        precio: 80,
-        cantidad: 40
+        categoria: {
+            nombre: "DETEGENTES",
+            id: "detergentes"
+        },
+        precio: 300
     },
-    {   
-        id:"Desodorante01",
-        titulo: "Desdorante de Ambientes",
-        Descripcion: "Desodorantes ambientales Varios",
-        imagen: "./img/desod-amb.jpg",
-        precio: 90,
-        cantidad: 70
-    },
-    {   
-        id: "Desodante02",
-        titulo: "Desodorante de Pisos",
-        Descripcion: "Desodantes de pisos varios",
+    {
+        id: "desodorantes de Piso",
+        titulo: "Desodorantes de Piso Varias Fragancias",
         imagen: "./img/desod-piso.jpg",
-        precio: 68,
-        cantidad: 50
+        categoria: {
+            nombre: "Desodorantes",
+            id: "desodorantes"
+        },
+        precio: 250
+    },
+    {
+        id: "desodorantes de Ambientes",
+        titulo: "Desodorantes de Ambientes Varias Fragancias",
+        imagen: "./img/desod-amb.jpg",
+        categoria: {
+            nombre: "Desodorantes",
+            id: "desodorantes"
+        },
+        precio: 290
     },
     {
         id: "Cloro",
-        titulo: "Cloro",
-        Descripcion: "Cloro Concentrado",
+        titulo: "Cloro Puro",
         imagen: "./img/cloro.jpg",
-        precio: 105,
-        cantidad: 100
-        
-    }
-]
+        categoria: {
+            nombre: "Cloro",
+            id: "cloro"
+        },
+        precio: 310
+    },
+    
+];
 
-const contenedorPrincipal = document.querySelector ("#contenedorPrincipal")
-const botonesAgregar = document.querySelectorAll(".btn btn-primary")
 
-function cargarProductos () {
+const contenedorProductos = document.querySelector("#contenedor-productos");
+const botonesCategorias = document.querySelectorAll(".boton-categoria");
+const tituloPrincipal = document.querySelector("#titulo-principal");
+let botonesAgregar = document.querySelectorAll(".producto-agregar");
+const numerito = document.querySelector("#numerito");
 
-    productos.forEach(producto => {
 
-        let div = document.createElement ("div");
-        div.classList.add ("producto");
+function cargarProductos(productosElegidos) {
+
+    contenedorProductos.innerHTML = "";
+
+    productosElegidos.forEach(producto => {
+
+        const div = document.createElement("div");
+        div.classList.add("producto");
         div.innerHTML = `
-        <img src="$(producto.imagen)" class="card-img-top" alt="$(producto.titulo)">
-            <div class="card-body">
-                <h5 class="card-title">$(producto.titulo)</h5>
-                <p class="card-text">$(producto.descripcion)</p>
-                <a href="#" class="btn btn-primary" id="$(producto.id)">AGREGAR</a>
+            <img class="producto-imagen" src="${producto.imagen}" alt="${producto.titulo}">
+            <div class="producto-detalles">
+                <h3 class="producto-titulo">${producto.titulo}</h3>
+                <p class="producto-precio">$${producto.precio}</p>
+                <button class="producto-agregar" id="${producto.id}">Agregar</button>
             </div>
-        `
-        contenedorPrincipal.append(div);
-        
+        `;
+
+        contenedorProductos.append(div);
     })
+
+    actualizarBotonesAgregar();
 }
 
-cargarProductos();
+cargarProductos(productos);
+
+botonesCategorias.forEach(boton => {
+    boton.addEventListener("click", (e) => {
+
+        botonesCategorias.forEach(boton => boton.classList.remove("active"));
+        e.currentTarget.classList.add("active");
+
+        if (e.currentTarget.id != "todos") {
+            const productoCategoria = productos.find(producto => producto.categoria.id === e.currentTarget.id);
+            tituloPrincipal.innerText = productoCategoria.categoria.nombre;
+            const productosBoton = productos.filter(producto => producto.categoria.id === e.currentTarget.id);
+            cargarProductos(productosBoton);
+        } else {
+            tituloPrincipal.innerText = "Todos los productos";
+            cargarProductos(productos);
+        }
+
+    })
+});
 
 function actualizarBotonesAgregar() {
-    botonesAgregar = document.querySelectorAll (".btn btn-primary")
+    botonesAgregar = document.querySelectorAll(".producto-agregar");
 
-    botonesAgregar.forEach (boton => {
-        boton.addEventListener("click , agregarAlCarrito");
-    })
+    botonesAgregar.forEach(boton => {
+        boton.addEventListener("click", agregarAlCarrito);
+    });
 }
 
-const productosEnCarrito = [];
+let productosEnCarrito;
 
-function agregarAlCarrito () {
+let productosEnCarritoLS = localStorage.getItem("productos-en-carrito");
 
-    const idboton = e.currentTarget.id;
-    const productoAgregado = productos.find (producto => producto.id ===idboton)
-    console.log (productosAgregados)
+if (productosEnCarritoLS) {
+    productosEnCarrito = JSON.parse(productosEnCarritoLS);
+    actualizarNumerito();
+} else {
+    productosEnCarrito = [];
 }
+
+function agregarAlCarrito(e) {
+    const idBoton = e.currentTarget.id;
+    const productoAgregado = productos.find(producto => producto.id === idBoton);
+
+    if(productosEnCarrito.some(producto => producto.id === idBoton)) {
+        const index = productosEnCarrito.findIndex(producto => producto.id === idBoton);
+        productosEnCarrito[index].cantidad++;
+    } else {
+        productoAgregado.cantidad = 1;
+        productosEnCarrito.push(productoAgregado);
+    }
+
+    actualizarNumerito();
+
+    localStorage.setItem("productos-en-carrito", JSON.stringify(productosEnCarrito));
+}
+
+function actualizarNumerito() {
+    let nuevoNumerito = productosEnCarrito.reduce((acc, producto) => acc + producto.cantidad, 0);
+    numerito.innerText = nuevoNumerito;
+}
+
+
 
 
 
