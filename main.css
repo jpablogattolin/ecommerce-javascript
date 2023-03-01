@@ -1,9 +1,18 @@
+@import url('https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700;800;900&display=swap');
+
+:root {
+    --clr-main: #4b33a8;
+    --clr-main-light: #785ce9;
+    --clr-white: #ececec;
+    --clr-gray: #e2e2e2;
+    --clr-red: #961818;
+}
 
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-   
+    font-family: 'Rubik', sans-serif;
 }
 
 h1, h2, h3, h4, h5, h6, p, a, input, textarea, ul {
@@ -22,13 +31,13 @@ a {
 .wrapper {
     display: grid;
     grid-template-columns: 1fr 4fr;
-    background-color: #8bc9be;
+    background-color: var(--clr-main);
 }
 
 aside {
     padding: 2rem;
     padding-right: 0;
-    color: #7e9190;
+    color: var(--clr-white);
     position: sticky;
     top: 0;
     height: 100vh;
@@ -51,7 +60,7 @@ aside {
 .boton-menu {
     background-color: transparent;
     border: 0;
-    color: brown;
+    color: var(--clr-white);
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -63,8 +72,8 @@ aside {
 }
 
 .boton-menu.active {
-    background-color: white;
-    color: gray;
+    background-color: var(--clr-white);
+    color: var(--clr-main);
     border-top-left-radius: 1rem;
     border-bottom-left-radius: 1rem;
     position: relative;
@@ -79,7 +88,7 @@ aside {
     right: 0;
     background-color: transparent;
     border-bottom-right-radius: .5rem;
-   
+    box-shadow: 0 1rem 0 var(--clr-white);
 }
 
 .boton-menu.active::after {
@@ -121,7 +130,7 @@ aside {
 }
 
 main {
-    background-color: #6e7a78;
+    background-color: var(--clr-white);
     margin: 1rem;
     margin-left: 0;
     border-radius: 2rem;
@@ -146,7 +155,7 @@ main {
 
 .producto-detalles {
     background-color: var(--clr-main);
-    color: #0e463b;
+    color: var(--clr-white);
     padding: .5rem;
     border-radius: 1rem;
     margin-top: -2rem;
@@ -220,7 +229,7 @@ main {
 .carrito-producto-eliminar {
     border: 0;
     background-color: transparent;
-    color: red;
+    color: var(--clr-red);
     cursor: pointer;
 }
 
@@ -231,7 +240,7 @@ main {
 
 .carrito-acciones-vaciar {
     border: 0;
-    background-color: gray;
+    background-color: var(--clr-gray);
     padding: 1rem;
     border-radius: 1rem;
     color: var(--clr-main);
@@ -263,6 +272,14 @@ main {
     cursor: pointer;
     border-top-right-radius: 1rem;
     border-bottom-right-radius: 1rem;
+}
+
+.header-mobile {
+    display: none;
+}
+
+.close-menu {
+    display: none;
 }
 
 .disabled {
